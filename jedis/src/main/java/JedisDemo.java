@@ -76,10 +76,18 @@ public class JedisDemo {
         // 基于strlen、getrange实现博客长度统计与文章预览
         // 长度统计
         Long blogLen = jedis.strlen("article:1:content");
-        System.out.println("博客长度统计: " + blogLen);
+        System.out.println("博客长度统计: " + blogLen); // 16字节
 
         // 预览
         String contentPreview = jedis.getrange("article:1:content", 0, 5); // 字节起止 0 - 5
-        System.out.println("预览: " + contentPreview);
+        System.out.println("预览: " + contentPreview); // 如何
+
+        // 基于append实现用户追加日志审计
+        jedis.setnx("operation_log", "");
+        for (int i = 0; i < 10; i++) {
+            jedis.append("operation_log", "第" + i + "条日志");
+        }
+        String log = jedis.get("operation_log");
+        System.out.println("所有操作日志:\n" + blog);
     }
 }
