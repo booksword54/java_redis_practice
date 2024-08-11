@@ -73,5 +73,13 @@ public class JedisDemo {
                           "article:1:time");
         System.out.println("查看博客: " + blog); // 查看博客: [学习Java, 如何学好Java, 小龙, 2024-10-01]
 
+        // 基于strlen、getrange实现博客长度统计与文章预览
+        // 长度统计
+        Long blogLen = jedis.strlen("article:1:content");
+        System.out.println("博客长度统计: " + blogLen);
+
+        // 预览
+        String contentPreview = jedis.getrange("article:1:content", 0, 5); // 字节起止 0 - 5
+        System.out.println("预览: " + contentPreview);
     }
 }
