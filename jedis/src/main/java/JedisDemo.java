@@ -1,4 +1,5 @@
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.List;
 import java.util.Set;
@@ -26,5 +27,19 @@ public class JedisDemo {
         for (String key : keys) {
             System.out.println(key);
         }
+
+        // 基于setnx实现分布式锁
+        String result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        System.out.println("第一次加锁的结果: " + result); // OK
+
+        result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        System.out.println("第二次加锁的结果: " + result); // null
+
+        // 删除分布式锁
+        jedis.del("lock_test");
+
+        result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        System.out.println("第三次加锁的结果: " + result); // OK
+
     }
 }
