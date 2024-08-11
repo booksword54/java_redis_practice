@@ -29,17 +29,49 @@ public class JedisDemo {
         }
 
         // 基于setnx实现分布式锁
-        String result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        String result = jedis.set("lock_test", "value", SetParams.setParams()
+                .nx());
         System.out.println("第一次加锁的结果: " + result); // OK
 
-        result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        result = jedis.set("lock_test", "value", SetParams.setParams()
+                .nx());
         System.out.println("第二次加锁的结果: " + result); // null
 
         // 删除分布式锁
         jedis.del("lock_test");
 
-        result = jedis.set("lock_test", "value", SetParams.setParams().nx());
+        result = jedis.set("lock_test", "value", SetParams.setParams()
+                .nx());
         System.out.println("第三次加锁的结果: " + result); // OK
+
+        // 基于msetnx、mget和mset实现文章博客的发布、查看与修改
+        // 发布
+        long msetnxResult = jedis.msetnx("article:1:title", "学习Redis",
+                                         "article:1:content", "如何学好Redis",
+                                         "article:1:author", "小华",
+                                         "article:1:time", "2024-08-01");
+        System.out.println("发布博客的结果: " + msetnxResult); // 发布博客的结果: 1
+
+        // 查看
+        List<String> blog = jedis.mget("article:1:title",
+                                       "article:1:content",
+                                       "article:1:author",
+                                       "article:1:time");
+        System.out.println("查看博客: " + blog); // 查看博客: [学习Redis, 如何学好Redis, 小华, 2024-08-01]
+
+        // 修改
+        String updateBlogResult = jedis.mset("article:1:title", "学习Java",
+                                             "article:1:content", "如何学好Java",
+                                             "article:1:author", "小龙",
+                                             "article:1:time", "2024-10-01");
+        System.out.println("修改博客的结果: " + updateBlogResult); // 修改博客的结果: OK
+
+        // 查看
+        blog = jedis.mget("article:1:title",
+                          "article:1:content",
+                          "article:1:author",
+                          "article:1:time");
+        System.out.println("查看博客: " + blog); // 查看博客: [学习Java, 如何学好Java, 小龙, 2024-10-01]
 
     }
 }
