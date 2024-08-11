@@ -89,5 +89,11 @@ public class JedisDemo {
         }
         String log = jedis.get("operation_log");
         System.out.println("所有操作日志:\n" + blog);
+
+        // 基于incr实现实现唯一ID生成器
+        for (int i = 1; i <= 10; i++) {
+            Long orderId = jedis.incr("order_id_counter");
+            System.out.println("生成的第" + i + "个唯一ID: " + orderId);
+        }
     }
 }
