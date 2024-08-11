@@ -95,5 +95,21 @@ public class JedisDemo {
             Long orderId = jedis.incr("order_id_counter");
             System.out.println("生成的第" + i + "个唯一ID: " + orderId);
         }
+
+        // 基于incr和decr实现博客点赞和取消
+        // 点赞
+        for (int i = 1; i <= 10; i++) {
+            jedis.incr("article:1:likeNumber");
+            // jedis.incrBy("article:1:likeNumber", 1);
+        }
+        long likeNumber = Long.parseLong(jedis.get("article:1:likeNumber"));
+        System.out.println("点赞次数为: " + likeNumber);
+
+        // 取消
+        jedis.decr("article:1:likeNumber");
+        // jedis.decrBy("article:1:likeNumber", 1);
+        likeNumber = Long.parseLong(jedis.get("article:1:likeNumber"));
+        System.out.println("点赞次数为: " + likeNumber);
+
     }
 }
