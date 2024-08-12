@@ -99,16 +99,16 @@ public class JedisDemo {
         // 基于incr和decr实现博客点赞和取消
         // 点赞
         for (int i = 1; i <= 10; i++) {
-            jedis.incr("article:1:likeNumber");
+            jedis.incr("article:1:like_number");
             // jedis.incrBy("article:1:likeNumber", 1);
         }
-        long likeNumber = Long.parseLong(jedis.get("article:1:likeNumber"));
+        long likeNumber = Long.parseLong(jedis.get("article:1:like_number"));
         System.out.println("点赞次数为: " + likeNumber);
 
         // 取消
-        jedis.decr("article:1:likeNumber");
+        jedis.decr("article:1:like_number");
         // jedis.decrBy("article:1:likeNumber", 1);
-        likeNumber = Long.parseLong(jedis.get("article:1:likeNumber"));
+        likeNumber = Long.parseLong(jedis.get("article:1:like_number"));
         System.out.println("点赞次数为: " + likeNumber);
 
     }
