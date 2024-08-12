@@ -110,7 +110,7 @@ public class BlogDemo {
             System.out.println(blog);
         }
         System.out.println("第二页博客");
-        List<String> secondPage = demo.findBlogByPage(10, 10);
+        List<String> secondPage = demo.findBlogByPage(2, 10);
         for (String blogId : secondPage) {
             Map<String, String> blog = demo.findBlogById(Long.parseLong(blogId));
             System.out.println(blog);
