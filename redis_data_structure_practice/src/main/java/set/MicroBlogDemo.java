@@ -108,7 +108,7 @@ public class MicroBlogDemo {
         System.out.println("用户和朋友共同关注: " + sameFollowUsers);
 
         Set<String> recommendFollowUsers = demo.getRecommendFollowUsers(userId, friendId);
+        // 推荐关注可能认识的人: [4]
         System.out.println("推荐关注可能认识的人: " + recommendFollowUsers);
-
     }
 }
