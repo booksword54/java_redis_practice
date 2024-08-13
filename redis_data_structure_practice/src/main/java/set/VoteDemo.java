@@ -22,7 +22,7 @@ public class VoteDemo {
      * 用户是否投票
      */
     public boolean hasVoted(long userId, long voteItemId) {
-        return jedis.sismember("vote_item_users::" + voteItemId, String.valueOf(userId))
+        return jedis.sismember("vote_item_users::" + voteItemId, String.valueOf(userId));
     }
 
     /**
