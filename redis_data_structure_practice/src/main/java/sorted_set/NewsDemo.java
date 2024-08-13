@@ -32,13 +32,11 @@ public class NewsDemo {
         for (int i = 0; i < 20; i++) {
             demo.addNews(i + 1, i + 1);
         }
-
         long maxTimestamp = 18;
         long minTimestamp = 2;
         int pageNo = 1;
         int pageSize = 5;
         int startIndex = (pageNo - 1) * pageSize;
-
         Set<Tuple> result = demo.searchNews(maxTimestamp, minTimestamp, startIndex, pageSize);
         // 指定时间范围的第一页新闻: [[18,18.0], [17,17.0], [16,16.0], [15,15.0], [14,14.0]]
         System.out.println("指定时间范围的第一页新闻: " + result);
