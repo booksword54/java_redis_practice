@@ -55,15 +55,37 @@ public class MicroBlogDemo {
         return jedis.scard("user::" + userId + "::follow_users");
     }
 
+    /**
+     * 查看共同关注
+     */
+    public Set<String> getSameFollowUsers(long userId, long otherUserId) {
+        return jedis.sinter("user::" + userId + "::follow_users", "user::" + otherUserId + "::follow_users");
+    }
+
+    /**
+     * 可能认识的人
+     * 用户关注的人关注的，用户没有关注的人
+     */
+    public Set<String> getRecommendFollowUsers(long userId, long otherUserId) {
+        Set<String> set = jedis.sdiff("user::" + otherUserId + "::follow_users", "user::" + userId + "::follow_users");
+        set.remove(String.valueOf(userId)); // 移除掉自己
+        return set;
+    }
+
     public static void main(String[] args) {
         MicroBlogDemo demo = new MicroBlogDemo();
 
         long userId = 1;
         long friendId = 2;
         long superStarId = 3;
+        long classmateId = 4;
+        long motherId = 5;
 
         demo.follow(userId, friendId);
+        demo.follow(userId, motherId);
         demo.follow(userId, superStarId);
+        demo.follow(friendId, userId);
+        demo.follow(friendId, classmateId);
         demo.follow(friendId, superStarId);
 
         Set<String> superStarFollowers = demo.getFollowers(superStarId);
@@ -80,5 +102,13 @@ public class MicroBlogDemo {
         long userFollowUsersCount = demo.getFollowerUsersCount(userId);
         // 用户关注几个: 2，关注了[2, 3]
         System.out.println("用户关注几个: " + userFollowUsersCount + "，关注了" + userFollowUsers);
+
+        Set<String> sameFollowUsers = demo.getSameFollowUsers(userId, friendId);
+        // 用户和朋友共同关注: [3]
+        System.out.println("用户和朋友共同关注: " + sameFollowUsers);
+
+        Set<String> recommendFollowUsers = demo.getRecommendFollowUsers(userId, friendId);
+        System.out.println("推荐关注可能认识的人: " + recommendFollowUsers);
+
     }
 }
